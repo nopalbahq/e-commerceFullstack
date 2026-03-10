@@ -76,8 +76,8 @@ export default function Navbar({ darkUI, darkMode }: DarkModeProps) {
         </Box>
 
         <List sx={{ display: "flex" }}>
-          {middleLink.map(({ title, path }) => (
-            <ListItem component={NavLink} to={path} sx={navStyles}>
+          {middleLink.map(({ title, path }, index) => (
+            <ListItem key={index} component={NavLink} to={path} sx={navStyles}>
               {title.toUpperCase()}
             </ListItem>
           ))}
@@ -97,8 +97,13 @@ export default function Navbar({ darkUI, darkMode }: DarkModeProps) {
           </IconButton>
 
           <List sx={{ display: "flex" }}>
-            {rightLink.map(({ title, path }) => (
-              <ListItem component={NavLink} to={path} sx={navStyles}>
+            {rightLink.map(({ title, path }, index) => (
+              <ListItem
+                key={index}
+                component={NavLink}
+                to={path}
+                sx={navStyles}
+              >
                 {title.toUpperCase()}
               </ListItem>
             ))}
