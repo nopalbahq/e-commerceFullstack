@@ -9,11 +9,18 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+// Accept Policy
+builder.Services.AddCors();
 
 // Add services to the container.
 var app = builder.Build();
 
+// HTTP Request
 app.MapControllers();
+app.UseCors(opt =>
+{
+    opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000");
+});
 
 // In non static way to call 
 // var IntializerDb = new DbInitializer();

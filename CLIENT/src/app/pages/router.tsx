@@ -1,0 +1,21 @@
+import { createBrowserRouter } from "react-router-dom";
+import App from "../layout/App";
+import HomePage from "./home/HomePage";
+import Catalog from "../features/Catalog";
+import AboutPage from "./about/AboutPage";
+import ContactPage from "./contact/ContactPage";
+import ProductDetails from "../features/ProductDetails";
+
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      { path: "", element: <HomePage /> },
+      { path: "/catalog", element: <Catalog /> },
+      { path: "/catalog/:id", element: <ProductDetails /> },
+      { path: "/about", element: <AboutPage /> },
+      { path: "/contact", element: <ContactPage /> },
+    ],
+  },
+]);
