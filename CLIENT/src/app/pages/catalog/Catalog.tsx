@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import ProductList from "./ProductList";
-import type { IProduct } from "../model/product";
+import ProductList from "../../features/ProductList";
+import type { IProduct } from "../../model/product";
 
 export default function Catalog() {
   const [products, setProducts] = useState<IProduct[]>([]);
