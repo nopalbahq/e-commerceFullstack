@@ -1,16 +1,24 @@
-import { useEffect, useState } from "react";
 import ProductList from "../../features/ProductList";
-import type { IProduct } from "../../model/product";
+import { useGetFetchProductsQuery } from "./catalogApi";
+// import { useEffect, useState } from "react";
+// import type { IProduct } from "../../model/product";
 
 export default function Catalog() {
-  const [products, setProducts] = useState<IProduct[]>([]);
+  // // useState Default
+  // const [products, setProducts] = useState<IProduct[]>([]);
 
-  // do Fetch
-  useEffect(() => {
-    fetch("https://localhost:5001/api/product")
-      .then((response) => response.json())
-      .then((data) => setProducts(data));
-  }, []);
+  // // do Fetch
+  // useEffect(() => {
+  //   fetch("https://localhost:5001/api/product")
+  //     .then((response) => response.json())
+  //     .then((data) => setProducts(data));
+  // }, []);
+
+  // RTK Redux
+  const { data: products, isLoading } = useGetFetchProductsQuery();
+
+  if (isLoading || !products) return <div>...loading</div>;
+
   return (
     <>
       <ProductList products={products} />

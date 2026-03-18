@@ -15,7 +15,7 @@ const initialState: DummyState = {
 };
 
 export const dummySlice = createSlice({
-  name: "Dummy Slice",
+  name: "DummySlice",
   initialState,
   reducers: {
     addDummy: (state) => {
@@ -27,6 +27,4 @@ export const dummySlice = createSlice({
   },
 });
 
-export function addDummy() {
-  return console.log("Dummy Add");
-}
+export const { addDummy } = dummySlice.actions;

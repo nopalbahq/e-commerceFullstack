@@ -8,6 +8,9 @@ export default function ContactPage() {
   // const dispatch = useDispatch();
 
   const { data } = useAppSelector((state) => state.Counter);
+  const { dummy_id, dummy_name, dummy_symbol } = useAppSelector(
+    (state) => state.DummySlice,
+  );
   const dispatch = useAppDispatch();
 
   return (
@@ -25,6 +28,10 @@ export default function ContactPage() {
           Decrement Data
         </Button>
       </ButtonGroup>
+
+      <Typography>{dummy_id}</Typography>
+      <Typography>{dummy_name}</Typography>
+      <Typography>{dummy_symbol}</Typography>
     </>
   );
 }
