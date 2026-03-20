@@ -1,14 +1,24 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { ICurrency } from "../../model/currency";
+import type { IDummy } from "../../model/dummy";
 
 export const contactApi = createApi({
   reducerPath: "contactApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://localhost:5001/api" }),
-  endpoints: (builder) => ({
-    getFetchContact: builder.query<ICurrency[], void>({
-      query: () => "/contact",
-    }),
-  }),
+  endpoints: (builder) => {
+    return {
+      getFetchDataDummy: builder.query<IDummy[], void>({
+        query: () => {
+          return { url: "contact" };
+        },
+      }),
+      getFetchDataEachDummy: builder.query<IDummy, number>({
+        query: (number) => {
+          return { url: `contact/${number}` };
+        },
+      }),
+    };
+  },
 });
 
-export const { useGetFetchContactQuery } = contactApi;
+export const { useGetFetchDataDummyQuery, useGetFetchDataEachDummyQuery } =
+  contactApi;

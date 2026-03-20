@@ -13,13 +13,15 @@ export function configureTheStore() {
 export const store = configureStore({
   reducer: {
     [catalogApi.reducerPath]: catalogApi.reducer,
-    [contactApi.reducerPath]: catalogApi.reducer,
+    [contactApi.reducerPath]: contactApi.reducer,
     Counter: counterSlice.reducer,
     uiSlice: uiSlice.reducer,
     DummySlice: dummySlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(catalogApi.middleware),
+    getDefaultMiddleware()
+      .concat(catalogApi.middleware)
+      .concat(contactApi.middleware),
 });
 
 // Infer the `RootState`,  `AppDispatch`, and `AppStore` types from the store itself

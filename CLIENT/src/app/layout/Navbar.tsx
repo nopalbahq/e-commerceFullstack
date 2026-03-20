@@ -4,12 +4,14 @@ import {
   Badge,
   Box,
   IconButton,
+  LinearProgress,
   List,
   ListItem,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import { useAppSelector } from "../store/store";
 
 const middleLink = [
   {
@@ -56,6 +58,7 @@ type DarkModeProps = {
 
 export default function Navbar({ darkUI, darkMode }: DarkModeProps) {
   // const darkMode = true;
+  const { isLoading } = useAppSelector((state) => state.uiSlice);
 
   return (
     <AppBar position="fixed">
@@ -110,6 +113,11 @@ export default function Navbar({ darkUI, darkMode }: DarkModeProps) {
           </List>
         </Box>
       </Toolbar>
+      {isLoading && (
+        <Box sx={{ width: "100%" }}>
+          <LinearProgress />
+        </Box>
+      )}
     </AppBar>
   );
 }

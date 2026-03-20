@@ -1,13 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { IDummy } from "../../model/dummy";
 
-export interface DummyState {
-  dummy_id: number;
-  dummy_name: string;
-  dummy_symbol: string;
-  dummy_active: boolean;
-}
-
-const initialState: DummyState = {
+const initialState: IDummy = {
   dummy_id: 505,
   dummy_name: "",
   dummy_symbol: "",
