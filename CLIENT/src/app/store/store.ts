@@ -1,10 +1,10 @@
 import { configureStore, legacy_createStore } from "@reduxjs/toolkit";
 import couterReducer, { counterSlice } from "../pages/contact/counterReducer";
 import { useDispatch, useSelector } from "react-redux";
-import { dummySlice } from "../pages/contact/dummyReducer";
 import { catalogApi } from "../pages/catalog/catalogApi";
-import { contactApi } from "../pages/contact/contactApi";
 import { uiSlice } from "../layout/uiSlice";
+import { dummyReducer } from "../pages/dummy/dummyReducer";
+import { dummyApi } from "../pages/dummy/dummyApi";
 
 export function configureTheStore() {
   return legacy_createStore(couterReducer);
@@ -13,15 +13,15 @@ export function configureTheStore() {
 export const store = configureStore({
   reducer: {
     [catalogApi.reducerPath]: catalogApi.reducer,
-    [contactApi.reducerPath]: contactApi.reducer,
+    [dummyApi.reducerPath]: dummyApi.reducer,
     Counter: counterSlice.reducer,
+    Dummy_Slice: dummyReducer.reducer,
     uiSlice: uiSlice.reducer,
-    DummySlice: dummySlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(catalogApi.middleware)
-      .concat(contactApi.middleware),
+      .concat(dummyApi.middleware),
 });
 
 // Infer the `RootState`,  `AppDispatch`, and `AppStore` types from the store itself

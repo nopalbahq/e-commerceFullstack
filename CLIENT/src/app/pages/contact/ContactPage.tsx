@@ -1,6 +1,5 @@
 // import { useDispatch, useSelector } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { useGetFetchDataDummyQuery } from "./contactApi";
 import { decrement, increment } from "./counterReducer";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 
@@ -10,14 +9,9 @@ export default function ContactPage() {
 
   // GET DATA
   const { data: counter } = useAppSelector((state) => state.Counter);
-  const { dummy_id, dummy_name, dummy_symbol } = useAppSelector(
-    (state) => state.DummySlice,
-  );
   const dispatch = useAppDispatch();
 
   // FETCH DATA
-  const { data: dummy, isLoading } = useGetFetchDataDummyQuery();
-  if (isLoading || !dummy) return <div>...Loading</div>;
 
   return (
     <>
@@ -34,10 +28,6 @@ export default function ContactPage() {
           Decrement Data
         </Button>
       </ButtonGroup>
-
-      <Typography>{dummy_id}</Typography>
-      <Typography>{dummy_name}</Typography>
-      <Typography>{dummy_symbol}</Typography>
     </>
   );
 }

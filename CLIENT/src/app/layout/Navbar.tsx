@@ -26,6 +26,10 @@ const middleLink = [
     title: "contact",
     path: "/contact",
   },
+  {
+    title: "dummy",
+    path: "/dummy",
+  },
 ];
 
 const rightLink = [
