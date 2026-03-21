@@ -1,4 +1,5 @@
 using API.Data;
+using API.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,11 +12,13 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 });
 // Accept Policy
 builder.Services.AddCors();
+builder.Services.AddTransient<ExceptionMiddleware>();
 
 // Add services to the container.
 var app = builder.Build();
 
 // HTTP Request
+app.UseMiddleware<ExceptionMiddleware>();
 app.MapControllers();
 app.UseCors(opt =>
 {
