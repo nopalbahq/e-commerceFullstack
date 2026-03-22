@@ -18,7 +18,7 @@ public class BuggyController : BaseApiController
   [HttpGet("bad-request")]
   public IActionResult GetBadRequest()
   {
-    return BadRequest();
+    return BadRequest("this is not a good request");
   }
 
   // 401 Unauthorized

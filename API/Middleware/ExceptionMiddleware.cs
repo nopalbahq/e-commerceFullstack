@@ -13,23 +13,23 @@ public class ExceptionMiddleware(IHostEnvironment env, ILogger<ExceptionMiddlewa
     {
       await next(context);
     }
-    catch (Exception exception)
+    catch (Exception ex)
     {
-      await HandleException(context, exception);
+      await HandleException(context, ex);
     }
   }
 
-  private async Task HandleException(HttpContext context, Exception exception)
+  private async Task HandleException(HttpContext context, Exception ex)
   {
-    logger.LogError(exception, exception.Message);
+    logger.LogError(ex, ex.Message);
     context.Response.ContentType = "application/json";
     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
     var response = new ProblemDetails
     {
       Status = 500,
-      Detail = env.IsDevelopment() ? exception.StackTrace : null,
-      Title = exception.Message
+      Detail = env.IsDevelopment() ? ex.StackTrace : null,
+      Title = ex.Message
     };
 
     var option = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };

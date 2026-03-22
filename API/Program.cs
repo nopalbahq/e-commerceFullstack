@@ -18,8 +18,8 @@ builder.Services.AddTransient<ExceptionMiddleware>();
 var app = builder.Build();
 
 // HTTP Request
-app.UseMiddleware<ExceptionMiddleware>();
 app.MapControllers();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(opt =>
 {
     opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000");
