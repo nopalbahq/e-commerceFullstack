@@ -31,6 +31,7 @@ public class BuggyController : BaseApiController
   // Validation-error
   [HttpGet("validation-error")]
   public IActionResult GetValidationError()
+  // errors
   {
     ModelState.AddModelError("Problem1", "This is the first ERROR");
     ModelState.AddModelError("Problem2", "This is the second ERROR");

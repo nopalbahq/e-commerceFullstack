@@ -32,6 +32,7 @@ public class ExceptionMiddleware(IHostEnvironment env, ILogger<ExceptionMiddlewa
       Title = ex.Message
     };
 
+
     var option = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
     var json = JsonSerializer.Serialize(response, option);
 
