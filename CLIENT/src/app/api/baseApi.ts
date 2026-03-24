@@ -7,14 +7,17 @@ import { startLoading, stopLoading } from "../layout/uiSlice";
 import { toast } from "react-toastify";
 import { router } from "../pages/router";
 
+// Base URL
 const baseUrlStandar = fetchBaseQuery({
   baseUrl: "https://localhost:5001/api",
 });
 
+// Delay
 const sleep = () => {
   return new Promise((resolve) => setTimeout(resolve, 1000));
 };
 
+// TypeScript
 type ErrorResponse = string | { title: string } | { errors: string[] };
 
 export const baseQuerySystem = async (
