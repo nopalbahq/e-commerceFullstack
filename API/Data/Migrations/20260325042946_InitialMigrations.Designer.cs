@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20260301034259_AddIsReadyToProducts")]
-    partial class AddIsReadyToProducts
+    [Migration("20260325042946_InitialMigrations")]
+    partial class InitialMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,34 +19,43 @@ namespace API.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.3");
 
-            modelBuilder.Entity("API.Entities.Currency", b =>
+            modelBuilder.Entity("API.Entities.Cart", b =>
                 {
-                    b.Property<int>("currencyId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("companyId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("currecnyCode")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("currecnyName")
+                    b.Property<string>("CartId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("isActive")
+                    b.HasKey("Id");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("API.Entities.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("isDel")
+                    b.Property<int>("CartId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("isDone")
+                    b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("currencyId");
+                    b.Property<int>("Qty")
+                        .HasColumnType("INTEGER");
 
-                    b.ToTable("currency");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("API.Entities.Product", b =>
@@ -74,15 +83,40 @@ namespace API.Data.Migrations
                     b.Property<long>("Price")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("QuantityStock")
+                    b.Property<int>("QuantityInStock")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("isReady")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("products");
+                    b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("API.Entities.CartItem", b =>
+                {
+                    b.HasOne("API.Entities.Cart", "Cart")
+                        .WithMany("Items")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("API.Entities.Cart", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

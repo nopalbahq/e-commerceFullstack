@@ -28,7 +28,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("carts");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("API.Entities.CartItem", b =>
@@ -89,7 +89,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("products");
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("API.Entities.CartItem", b =>

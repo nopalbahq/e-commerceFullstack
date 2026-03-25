@@ -6,29 +6,29 @@ namespace API.Data;
 
 public class DbInitializer
 {
-  // Build Method Function
-  public static void InitDb(WebApplication app)
-  {
-    using var scope = app.Services.CreateScope();
+    // Build Method Function
+    public static void InitDb(WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
 
-    var context = scope.ServiceProvider.GetRequiredService<StoreContext>()
-    // if (context == null) throw new InvalidOperationException
-    ?? throw new InvalidOperationException("Failed to retreive store context");
+        var context = scope.ServiceProvider.GetRequiredService<StoreContext>()
+        // if (context == null) throw new InvalidOperationException
+        ?? throw new InvalidOperationException("Failed to retreive store context");
 
-    // Dummy data Product
-    SeedData(context);
-  }
+        // Dummy data Product
+        SeedData(context);
+    }
 
-  private static void SeedData(StoreContext context)
-  {
-    // Migrasi data dari StoreContext ambil datanya
-    context.Database.Migrate();
+    private static void SeedData(StoreContext context)
+    {
+        // Migrasi data dari StoreContext ambil datanya
+        context.Database.Migrate();
 
-    //  Jika database sudah terisi maka matikan Methode ini
-    if (context.products.Any()) return;
+        //  Jika database sudah terisi maka matikan Methode ini
+        if (context.products.Any()) return;
 
-    // Dummy Product
-    var products = new List<Product>
+        // Dummy Product
+        var products = new List<Product>
     {
           new() {
               Name = "Angular Speedster Board 2000",
@@ -209,8 +209,8 @@ public class DbInitializer
               QuantityInStock = 100
           },
     };
-    context.products.AddRange(products);
+        context.products.AddRange(products);
 
-    context.SaveChanges();
-  }
+        context.SaveChanges();
+    }
 }
