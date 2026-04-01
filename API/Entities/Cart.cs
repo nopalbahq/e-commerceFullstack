@@ -37,7 +37,7 @@ public class Cart
   // Find Item
   public CartItem? FindItem(int productId)
   {
-    return Items.FirstOrDefault(Items => Items.ProductId == productId);
+    return Items.FirstOrDefault(item => item.ProductId == productId);
   }
 
   public void RemoveItem(int productId, int qty)
