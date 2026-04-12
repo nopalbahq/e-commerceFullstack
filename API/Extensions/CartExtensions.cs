@@ -6,12 +6,12 @@ namespace API.Extensions;
 
 public static class CartExtensions
 {
-  public static CartDto ToDo(this Cart carts)
+  public static CartDto ToDto(this Cart Cart)
   {
     return new CartDto
     {
-      CartId = carts.CartId,
-      Items = carts.Items.Select(x => new CartItemDto
+      CartId = Cart.CartId,
+      Items = Cart.Items.Select(x => new CartItemDto
       {
         ProductId = x.ProductId,
         Name = x.Product.Name,

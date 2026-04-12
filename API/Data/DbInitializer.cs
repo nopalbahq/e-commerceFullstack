@@ -25,7 +25,7 @@ public class DbInitializer
         context.Database.Migrate();
 
         //  Jika database sudah terisi maka matikan Methode ini
-        if (context.products.Any()) return;
+        if (context.Product.Any()) return;
 
         // Dummy Product
         var products = new List<Product>
@@ -209,7 +209,7 @@ public class DbInitializer
               QuantityInStock = 100
           },
     };
-        context.products.AddRange(products);
+        context.Product.AddRange(products);
 
         context.SaveChanges();
     }
