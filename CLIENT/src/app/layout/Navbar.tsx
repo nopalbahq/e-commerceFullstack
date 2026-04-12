@@ -10,7 +10,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAppSelector } from "../store/store";
 
 const middleLink = [
@@ -97,7 +97,12 @@ export default function Navbar({ darkUI, darkMode }: DarkModeProps) {
             alignItems: "center",
           }}
         >
-          <IconButton size="large" sx={{ color: "inherit" }}>
+          <IconButton
+            component={Link}
+            to="/cart"
+            size="large"
+            sx={{ color: "inherit" }}
+          >
             <Badge badgeContent="4" color="secondary">
               <ShoppingCart />
             </Badge>

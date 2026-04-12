@@ -10,6 +10,7 @@ import { router } from "../pages/router";
 // Base URL
 const baseUrlStandar = fetchBaseQuery({
   baseUrl: "https://localhost:5001/api",
+  credentials: "include",
 });
 
 // Delay

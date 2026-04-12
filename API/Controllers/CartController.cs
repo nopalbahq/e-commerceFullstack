@@ -49,7 +49,7 @@ namespace API.Controllers
             var result = await context.SaveChangesAsync() > 0;
 
             // 
-            if (result) return CreatedAtAction(nameof(GetCart), carts);
+            if (result) return CreatedAtAction(nameof(GetCart), carts.ToDto());
 
 
             return BadRequest("Problem Updating cart");
@@ -58,9 +58,20 @@ namespace API.Controllers
 
 
         [HttpDelete]
-        public async Task<ActionResult> RemoveItemToCart()
+        public async Task<ActionResult> RemoveItemToCart(int productId, int qty)
         {
-            return Ok();
+            // Get Cart
+            var carts = await RetreiveGetCart();
+
+            // Remove the item or reduce its quantity
+            if (carts == null) return BadRequest("Unable to retreive cart");
+            carts.RemoveItem(productId, qty);
+
+
+            // Save Changes
+            var result = await context.SaveChangesAsync() > 0;
+            if (result) return Ok();
+            return BadRequest("Problem Updateing Cart");
         }
 
 

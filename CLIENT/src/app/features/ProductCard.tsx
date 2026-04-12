@@ -8,12 +8,14 @@ import {
 } from "@mui/material";
 import type { IProduct } from "../model/product";
 import { Link } from "react-router-dom";
+import { useAddCartItemMutation } from "../pages/cart/cartApi";
 
 type Product = {
   product: IProduct;
 };
 
 export default function ProductCard({ product }: Product) {
+  const [addItemCart, { isLoading }] = useAddCartItemMutation();
   return (
     <Card
       elevation={3}
@@ -42,7 +44,12 @@ export default function ProductCard({ product }: Product) {
           ${(product.price / 100).toFixed(2)}
         </Typography>
         <CardActions sx={{ justifyContent: "space-between" }}>
-          <Button>Add to cart</Button>
+          <Button
+            disabled={isLoading}
+            onClick={() => addItemCart({ productId: product.id, qty: 1 })}
+          >
+            Add to cart
+          </Button>
           <Button component={Link} to={`/catalog/${product.id}`}>
             View
           </Button>
