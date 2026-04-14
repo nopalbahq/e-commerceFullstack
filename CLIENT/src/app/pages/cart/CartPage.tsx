@@ -1,5 +1,6 @@
-import { Typography } from "@mui/material";
+import { Grid2, Typography } from "@mui/material";
 import { useGetFetchCartQuery } from "./cartApi";
+import CartItem from "./CartItem";
 
 export default function CartPage() {
   const { data, isLoading } = useGetFetchCartQuery();
@@ -10,8 +11,12 @@ export default function CartPage() {
     return <Typography variant="h3">There is no cart in here</Typography>;
 
   return (
-    <>
-      <Typography>{data.cartId}</Typography>
-    </>
+    <Grid2 container spacing={2}>
+      <Grid2 size={8}>
+        {data.items.map((item) => {
+          return <CartItem items={item} key={item.productId}></CartItem>;
+        })}
+      </Grid2>
+    </Grid2>
   );
 }

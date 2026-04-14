@@ -19,7 +19,7 @@ public static class CartExtensions
         Brand = x.Product.Brand,
         Type = x.Product.Type,
         PictureUrl = x.Product.PictureUrl,
-        Quantity = x.Product.QuantityInStock
+        Quantity = x.Qty
       }).ToList()
     };
   }
