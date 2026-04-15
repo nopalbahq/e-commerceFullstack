@@ -3,6 +3,7 @@ import type { IDummy } from "../../model/dummy";
 
 export const dummyApi = createApi({
   reducerPath: "dummyApi",
+  tagTypes: ["dummy"],
   baseQuery: fetchBaseQuery({ baseUrl: "https://localhost:5001/api" }),
   endpoints: (builder) => {
     return {

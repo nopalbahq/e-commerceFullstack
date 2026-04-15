@@ -27,6 +27,7 @@ export const baseQuerySystem = async (
   extraOptions: object,
 ) => {
   // Start Loading
+  // MXMB500 coupon macbook
   api.dispatch(startLoading());
   await sleep();
   const result = await baseUrlStandar(args, api, extraOptions);
