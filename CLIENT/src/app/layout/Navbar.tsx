@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { Link, NavLink } from "react-router-dom";
 import { useAppSelector } from "../store/store";
+import { useGetFetchCartQuery } from "../pages/cart/cartApi";
 
 const middleLink = [
   {
@@ -64,6 +65,12 @@ export default function Navbar({ darkUI, darkMode }: DarkModeProps) {
   // const darkMode = true;
   const { isLoading } = useAppSelector((state) => state.uiSlice);
 
+  // const CartFetch
+  const { data: carts } = useGetFetchCartQuery();
+  // const ItemCount => item + item.qunatity
+  const itemCount =
+    carts?.items.reduce((sum, item) => sum + item.quantity, 0) || 0;
+
   return (
     <AppBar position="fixed">
       <Toolbar
@@ -103,7 +110,7 @@ export default function Navbar({ darkUI, darkMode }: DarkModeProps) {
             size="large"
             sx={{ color: "inherit" }}
           >
-            <Badge badgeContent="4" color="secondary">
+            <Badge badgeContent={itemCount} color="secondary">
               <ShoppingCart />
             </Badge>
           </IconButton>

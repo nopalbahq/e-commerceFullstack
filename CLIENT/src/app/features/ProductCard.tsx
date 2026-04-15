@@ -46,7 +46,7 @@ export default function ProductCard({ product }: Product) {
         <CardActions sx={{ justifyContent: "space-between" }}>
           <Button
             disabled={isLoading}
-            onClick={() => addItemCart({ productId: product.id, qty: 1 })}
+            onClick={() => addItemCart({ product, qty: 1 })}
           >
             Add to cart
           </Button>

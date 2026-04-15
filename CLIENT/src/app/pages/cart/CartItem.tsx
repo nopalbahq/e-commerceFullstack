@@ -1,12 +1,15 @@
 import { Box, Grid2, IconButton, Paper, Typography } from "@mui/material";
 import type { IItem } from "../../model/cart";
 import { Add, Close, Remove } from "@mui/icons-material";
+import { useRemoveCartItemMutation } from "./cartApi";
 
 type ItemProp = {
   items: IItem;
 };
 
 export default function CartItem({ items }: ItemProp) {
+  const [removeCartItem] = useRemoveCartItemMutation();
+
   return (
     <Paper
       sx={{
@@ -45,6 +48,7 @@ export default function CartItem({ items }: ItemProp) {
 
           <Grid2 container spacing={1} alignItems={"center"}>
             <IconButton
+              onClick={() => removeCartItem({ productId: items.productId, qty: 1 })}
               color="error"
               size="small"
               sx={{ border: 1, borderRadius: 5, minWidth: 0 }}
@@ -52,17 +56,14 @@ export default function CartItem({ items }: ItemProp) {
               <Remove></Remove>
             </IconButton>
             <Typography variant="h6">{items.quantity}</Typography>
-            <IconButton
-              color="success"
-              size="small"
-              sx={{ border: 1, borderRadius: 5, minWidth: 0 }}
-            >
+            <IconButton color="success" size="small" sx={{ border: 1, borderRadius: 5, minWidth: 0 }}>
               <Add></Add>
             </IconButton>
           </Grid2>
         </Box>
       </Box>
       <IconButton
+        onClick={() => removeCartItem({ productId: items.productId, qty: items.quantity })}
         color="error"
         size="small"
         sx={{
