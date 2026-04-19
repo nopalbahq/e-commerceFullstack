@@ -3,6 +3,10 @@ import { baseQuerySystem } from "../../api/baseApi";
 import { IItem, type ICart } from "../../model/cart";
 import type { IProduct } from "../../model/product";
 
+function isCartItem(product: IProduct | IItem): product is IItem {
+  return (product as IItem).quantity !== undefined;
+}
+
 export const cartApi = createApi({
   reducerPath: "cartApi", // nama slice di Redux store
   baseQuery: baseQuerySystem, // fungsi untuk memanggil backend (biasanya axios + token)
@@ -15,20 +19,25 @@ export const cartApi = createApi({
         providesTags: ["Carts"],
       }),
       // Add Cart
-      addCartItem: builder.mutation<ICart, { product: IProduct; qty: number }>({
-        query: ({ product, qty }) => ({
-          url: `carts?productId=${product.id}&qty=${qty}`,
-          method: "POST",
-        }),
+      addCartItem: builder.mutation<ICart, { product: IProduct | IItem; qty: number }>({
+        query: ({ product, qty }) => {
+          const productId = isCartItem(product) ? product.productId : product.id;
+          return {
+            url: `carts?productId=${productId}&qty=${qty}`,
+            method: "POST",
+          };
+        },
         //lifecycle hook yang berjalan segera setelah mutation dimulai, sebelum response dari server datang.
         onQueryStarted: async ({ product, qty }, { dispatch, queryFulfilled }) => {
           const patchResult = dispatch(
             cartApi.util.updateQueryData("getFetchCart", undefined, (draft) => {
-              const existingItem = draft.items.find((item) => item.productId === product.id);
+              const productId = isCartItem(product) ? product.productId : product.id;
+              const existingItem = draft.items.find((item) => item.productId === productId);
               if (existingItem) existingItem.quantity += qty;
-              else draft.items.push(new IItem(product, qty));
+              else draft.items.push(isCartItem(product) ? product : new IItem(product, qty));
             }),
           );
+
           try {
             await queryFulfilled; //tunggu sampai server kasih response
             dispatch(cartApi.util.invalidateTags(["Carts"])); // invalidate cache

@@ -1,7 +1,8 @@
 import { Box, Grid2, IconButton, Paper, Typography } from "@mui/material";
 import type { IItem } from "../../model/cart";
 import { Add, Close, Remove } from "@mui/icons-material";
-import { useRemoveCartItemMutation } from "./cartApi";
+import { useAddCartItemMutation, useRemoveCartItemMutation } from "./cartApi";
+import { currencyFormat } from "../../lib/util";
 
 type ItemProp = {
   items: IItem;
@@ -9,6 +10,7 @@ type ItemProp = {
 
 export default function CartItem({ items }: ItemProp) {
   const [removeCartItem] = useRemoveCartItemMutation();
+  const [addCartItem] = useAddCartItemMutation();
 
   return (
     <Paper
@@ -39,10 +41,10 @@ export default function CartItem({ items }: ItemProp) {
           <Typography variant="h6">{items.name}</Typography>
           <Box display={"flex"} alignItems={"center"} gap={3}>
             <Typography sx={{ fontSize: "1.1rem" }}>
-              ${(items.price / 100).toFixed(2)} x {items.quantity}
+              {currencyFormat(items.price)} x {items.quantity}
             </Typography>
             <Typography sx={{ fontSize: "1.1rem" }} color="primary">
-              ${((items.price / 100) * items.quantity).toFixed(2)}
+              {currencyFormat(items.price * items.quantity)}
             </Typography>
           </Box>
 
@@ -56,7 +58,12 @@ export default function CartItem({ items }: ItemProp) {
               <Remove></Remove>
             </IconButton>
             <Typography variant="h6">{items.quantity}</Typography>
-            <IconButton color="success" size="small" sx={{ border: 1, borderRadius: 5, minWidth: 0 }}>
+            <IconButton
+              onClick={() => addCartItem({ product: items, qty: 1 })}
+              color="success"
+              size="small"
+              sx={{ border: 1, borderRadius: 5, minWidth: 0 }}
+            >
               <Add></Add>
             </IconButton>
           </Grid2>

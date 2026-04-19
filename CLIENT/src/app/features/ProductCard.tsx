@@ -1,14 +1,8 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
 import type { IProduct } from "../model/product";
 import { Link } from "react-router-dom";
 import { useAddCartItemMutation } from "../pages/cart/cartApi";
+import { currencyFormat } from "../lib/util";
 
 type Product = {
   product: IProduct;
@@ -27,27 +21,16 @@ export default function ProductCard({ product }: Product) {
         justifyContent: "space-between",
       }}
     >
-      <CardMedia
-        sx={{ height: 240, backgroundSize: "cover" }}
-        image={product.pictureUrl}
-        title={product.name}
-      />
+      <CardMedia sx={{ height: 240, backgroundSize: "cover" }} image={product.pictureUrl} title={product.name} />
       <CardContent>
-        <Typography
-          gutterBottom
-          sx={{ color: "secondary.main" }}
-          variant="subtitle2"
-        >
+        <Typography gutterBottom sx={{ color: "secondary.main" }} variant="subtitle2">
           {product.name}
         </Typography>
         <Typography variant="h6" sx={{ color: "secondary.main" }}>
-          ${(product.price / 100).toFixed(2)}
+          {currencyFormat(product.price)}
         </Typography>
         <CardActions sx={{ justifyContent: "space-between" }}>
-          <Button
-            disabled={isLoading}
-            onClick={() => addItemCart({ product, qty: 1 })}
-          >
+          <Button disabled={isLoading} onClick={() => addItemCart({ product, qty: 1 })}>
             Add to cart
           </Button>
           <Button component={Link} to={`/catalog/${product.id}`}>
