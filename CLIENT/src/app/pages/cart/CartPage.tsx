@@ -8,7 +8,7 @@ export default function CartPage() {
 
   if (isLoading) return <Typography>is Loading...</Typography>;
 
-  if (!data) return <Typography variant="h3">There is no cart in here</Typography>;
+  if (!data || data.items.length === 0) return <Typography variant="h3">There is no cart in here</Typography>;
 
   return (
     <Grid2 container spacing={2}>

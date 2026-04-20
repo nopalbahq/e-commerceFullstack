@@ -6,14 +6,14 @@ export interface ICart {
 }
 
 export class IItem {
-  constructor(product: IProduct, qty: number) {
+  constructor(product: IProduct, quantity: number) {
     this.productId = product.id;
     this.name = product.name;
     this.price = product.price;
     this.pictureUrl = product.pictureUrl;
     this.brand = product.brand;
     this.type = product.type;
-    this.quantity = qty;
+    this.quantity = quantity;
   }
 
   productId: number;

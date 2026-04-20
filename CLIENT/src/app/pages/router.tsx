@@ -9,6 +9,7 @@ import DummyPage from "./dummy/DummyPage";
 import ServerError from "../error/ServerError";
 import NotFound from "../error/NotFound";
 import CartPage from "./cart/CartPage";
+import CheckOutPage from "./checkout/CheckOutPage";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
       { path: "/catalog", element: <Catalog /> },
       { path: "/catalog/:id", element: <ProductDetails /> },
       { path: "/cart", element: <CartPage /> },
+      { path: "/checkout", element: <CheckOutPage /> },
       { path: "/about", element: <AboutPage /> },
       { path: "/contact", element: <ContactPage /> },
       { path: "/server-error", element: <ServerError /> },

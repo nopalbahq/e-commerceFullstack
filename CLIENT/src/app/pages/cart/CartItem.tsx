@@ -50,7 +50,7 @@ export default function CartItem({ items }: ItemProp) {
 
           <Grid2 container spacing={1} alignItems={"center"}>
             <IconButton
-              onClick={() => removeCartItem({ productId: items.productId, qty: 1 })}
+              onClick={() => removeCartItem({ productId: items.productId, quantity: 1 })}
               color="error"
               size="small"
               sx={{ border: 1, borderRadius: 5, minWidth: 0 }}
@@ -59,7 +59,7 @@ export default function CartItem({ items }: ItemProp) {
             </IconButton>
             <Typography variant="h6">{items.quantity}</Typography>
             <IconButton
-              onClick={() => addCartItem({ product: items, qty: 1 })}
+              onClick={() => addCartItem({ product: items, quantity: 1 })}
               color="success"
               size="small"
               sx={{ border: 1, borderRadius: 5, minWidth: 0 }}
@@ -70,7 +70,7 @@ export default function CartItem({ items }: ItemProp) {
         </Box>
       </Box>
       <IconButton
-        onClick={() => removeCartItem({ productId: items.productId, qty: items.quantity })}
+        onClick={() => removeCartItem({ productId: items.productId, quantity: items.quantity })}
         color="error"
         size="small"
         sx={{

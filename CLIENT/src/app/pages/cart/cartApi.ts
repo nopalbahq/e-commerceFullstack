@@ -19,22 +19,27 @@ export const cartApi = createApi({
         providesTags: ["Carts"],
       }),
       // Add Cart
-      addCartItem: builder.mutation<ICart, { product: IProduct | IItem; qty: number }>({
-        query: ({ product, qty }) => {
+      addCartItem: builder.mutation<ICart, { product: IProduct | IItem; quantity: number }>({
+        query: ({ product, quantity }) => {
           const productId = isCartItem(product) ? product.productId : product.id;
           return {
-            url: `carts?productId=${productId}&qty=${qty}`,
+            url: `carts?productId=${productId}&qty=${quantity}`,
             method: "POST",
           };
         },
         //lifecycle hook yang berjalan segera setelah mutation dimulai, sebelum response dari server datang.
-        onQueryStarted: async ({ product, qty }, { dispatch, queryFulfilled }) => {
+        onQueryStarted: async ({ product, quantity }, { dispatch, queryFulfilled }) => {
+          let isNewCart = false;
           const patchResult = dispatch(
             cartApi.util.updateQueryData("getFetchCart", undefined, (draft) => {
               const productId = isCartItem(product) ? product.productId : product.id;
-              const existingItem = draft.items.find((item) => item.productId === productId);
-              if (existingItem) existingItem.quantity += qty;
-              else draft.items.push(isCartItem(product) ? product : new IItem(product, qty));
+              if (!draft.cartId) isNewCart = true;
+
+              if (!isNewCart) {
+                const existingItem = draft.items.find((item) => item.productId === productId);
+                if (existingItem) existingItem.quantity += quantity;
+                else draft.items.push(isCartItem(product) ? product : { ...product, productId: product.id, quantity });
+              }
             }),
           );
 
@@ -48,17 +53,17 @@ export const cartApi = createApi({
         },
       }),
       // Remove Cart
-      removeCartItem: builder.mutation<void, { productId: number; qty: number }>({
-        query: ({ productId, qty }) => ({
-          url: `carts?productId=${productId}&qty=${qty}`,
+      removeCartItem: builder.mutation<void, { productId: number; quantity: number }>({
+        query: ({ productId, quantity }) => ({
+          url: `carts?productId=${productId}&qty=${quantity}`,
           method: "DELETE",
         }),
-        onQueryStarted: async ({ productId, qty }, { dispatch, queryFulfilled }) => {
+        onQueryStarted: async ({ productId, quantity }, { dispatch, queryFulfilled }) => {
           const patchResult = dispatch(
             cartApi.util.updateQueryData("getFetchCart", undefined, (draft) => {
               const itemIndex = draft.items.findIndex((item) => item.productId === productId);
               if (itemIndex >= 0) {
-                draft.items[itemIndex].quantity -= qty;
+                draft.items[itemIndex].quantity -= quantity;
                 if (draft.items[itemIndex].quantity <= 0) {
                   draft.items.splice(itemIndex, 1);
                 }

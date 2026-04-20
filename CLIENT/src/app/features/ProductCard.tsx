@@ -30,7 +30,7 @@ export default function ProductCard({ product }: Product) {
           {currencyFormat(product.price)}
         </Typography>
         <CardActions sx={{ justifyContent: "space-between" }}>
-          <Button disabled={isLoading} onClick={() => addItemCart({ product, qty: 1 })}>
+          <Button disabled={isLoading} onClick={() => addItemCart({ product, quantity: 1 })}>
             Add to cart
           </Button>
           <Button component={Link} to={`/catalog/${product.id}`}>

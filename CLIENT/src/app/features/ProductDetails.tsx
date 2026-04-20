@@ -14,6 +14,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useGetFetchProductQuery } from "../pages/catalog/catalogApi";
+import { useAddCartItemMutation, useGetFetchCartQuery, useRemoveCartItemMutation } from "../pages/cart/cartApi";
+import { useEffect, useState, type ChangeEvent } from "react";
 
 export default function ProductDetails() {
   // // Hook
@@ -29,10 +31,39 @@ export default function ProductDetails() {
   // }, [id]);
 
   const { id } = useParams();
+  const [addItemCart] = useAddCartItemMutation();
+  const [removeItemCart] = useRemoveCartItemMutation();
+  const { data: cart } = useGetFetchCartQuery();
   const { data: product, isLoading } = useGetFetchProductQuery(id ? +id : 0);
+  const item = cart?.items.find((item) => item.productId === +id!);
+  const [quantity, setQuantity] = useState(0);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (item) setQuantity(item.quantity);
+  }, [item]);
 
   // Loading
-  if (isLoading || !product) return <div>...Loading</div>;
+  if (isLoading || !product) return <div>...loading</div>;
+
+  // Update Cart
+  const handleUpdateCart = () => {
+    // build abosulte value (2 - 5) = 3 != -3. if (item) abs else quantity
+    const updateQuantity = item ? Math.abs(quantity - item.quantity) : quantity;
+
+    // if item null or quantitiy do AddItemCart else RemoveItemCart
+    if (!item || quantity) {
+      addItemCart({ product, quantity: updateQuantity });
+    } else {
+      removeItemCart({ productId: product.id, quantity: updateQuantity });
+    }
+  };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = +event.currentTarget.value;
+
+    if (value >= 0) setQuantity(value);
+  };
 
   const productDetail = [
     { label: "Name", value: product.name },
@@ -45,11 +76,7 @@ export default function ProductDetails() {
   return (
     <Grid2 container spacing={6} maxWidth="lg" sx={{ mx: "auto" }}>
       <Grid2 size={6}>
-        <img
-          src={product.pictureUrl}
-          alt={product.name}
-          style={{ width: "100%" }}
-        ></img>
+        <img src={product.pictureUrl} alt={product.name} style={{ width: "100%" }}></img>
       </Grid2>
       <Grid2 size={6}>
         <Typography variant="h3">{product.name}</Typography>
@@ -66,9 +93,7 @@ export default function ProductDetails() {
             <TableBody>
               {productDetail.map((detail, index) => (
                 <TableRow key={index}>
-                  <TableCell sx={{ fontWeight: "bold" }}>
-                    {detail.label}
-                  </TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>{detail.label}</TableCell>
                   <TableCell>{detail.value}</TableCell>
                 </TableRow>
               ))}
@@ -82,11 +107,14 @@ export default function ProductDetails() {
               type="number"
               label="Quantity in Basket"
               fullWidth
-              defaultValue={1}
+              value={quantity}
+              onChange={handleInputChange}
             />
           </Grid2>
           <Grid2 size={6}>
             <Button
+              onClick={handleUpdateCart}
+              disabled={quantity === item?.quantity || (!item && quantity === 0)}
               sx={{ height: "55px" }}
               color="primary"
               size="large"
