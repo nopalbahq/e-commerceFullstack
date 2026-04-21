@@ -1,5 +1,6 @@
 using API.Data;
 using API.Entities;
+using API.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,15 @@ namespace API.Controllers
     {
         // List Ambil semua product
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts()
+        public async Task<ActionResult<List<Product>>> GetProducts(string? orderBy, string? searchTerm)
         {
-            return await context.Product.ToListAsync();
+            var query = context.Product
+            .Sort(orderBy)
+            .Search(searchTerm)
+            .AsQueryable();
+
+
+            return await query.ToListAsync();
         }
 
         // Proudct persatuan atau Per ID
