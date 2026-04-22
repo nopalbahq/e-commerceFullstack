@@ -1,6 +1,7 @@
 using API.Data;
 using API.Entities;
 using API.Extensions;
+using API.RequestHelper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,15 +12,18 @@ namespace API.Controllers
     {
         // List Ambil semua product
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts(string? orderBy, string? searchTerm)
+        public async Task<ActionResult<List<Product>>> GetProducts([FromQuery] ProductParams productParams)
         {
             var query = context.Product
-            .Sort(orderBy)
-            .Search(searchTerm)
+            .Sort(productParams.OrderBy)
+            .Search(productParams.SearchTerm)
+            .Filter(productParams.Brands, productParams.Types)
             .AsQueryable();
 
-
+            var product = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
             return await query.ToListAsync();
+
+
         }
 
         // Proudct persatuan atau Per ID
