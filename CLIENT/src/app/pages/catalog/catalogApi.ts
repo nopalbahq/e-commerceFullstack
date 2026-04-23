@@ -12,7 +12,10 @@ export const catalogApi = createApi({
     getFetchProduct: builder.query<IProduct, number>({
       query: (productId) => ({ url: `products/${productId}` }),
     }),
+    getFetchFilters: builder.query<{ brand: string[]; type: string[] }, void>({
+      query: () => ({ url: "products/filters" }),
+    }),
   }),
 });
 
-export const { useGetFetchProductsQuery, useGetFetchProductQuery } = catalogApi;
+export const { useGetFetchProductsQuery, useGetFetchProductQuery, useGetFetchFiltersQuery } = catalogApi;

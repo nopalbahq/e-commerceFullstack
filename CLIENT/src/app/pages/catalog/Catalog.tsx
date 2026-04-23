@@ -1,5 +1,7 @@
-import ProductList from "../../features/ProductList";
+import { Grid2 } from "@mui/material";
 import { useGetFetchProductsQuery } from "./catalogApi";
+import ProductList from "../../features/ProductList";
+import Filters from "./Filters";
 // import { useEffect, useState } from "react";
 // import type { IProduct } from "../../model/product";
 
@@ -20,8 +22,13 @@ export default function Catalog() {
   if (isLoading || !products) return <div>...loading</div>;
 
   return (
-    <>
-      <ProductList products={products} />
-    </>
+    <Grid2 container spacing={4}>
+      <Grid2 size={3}>
+        <Filters />
+      </Grid2>
+      <Grid2 size={9}>
+        <ProductList products={products} />
+      </Grid2>
+    </Grid2>
   );
 }
