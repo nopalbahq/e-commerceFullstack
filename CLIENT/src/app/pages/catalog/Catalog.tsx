@@ -1,7 +1,8 @@
 import { Grid2 } from "@mui/material";
 import { useGetFetchProductsQuery } from "./catalogApi";
 import ProductList from "../../features/ProductList";
-import Filters from "./Filters";
+import Filters from "../../features/Filters";
+import { useAppSelector } from "../../store/store";
 // import { useEffect, useState } from "react";
 // import type { IProduct } from "../../model/product";
 
@@ -17,7 +18,8 @@ export default function Catalog() {
   // }, []);
 
   // RTK Redux
-  const { data: products, isLoading } = useGetFetchProductsQuery();
+  const productParams = useAppSelector((state) => state.catalog);
+  const { data: products, isLoading } = useGetFetchProductsQuery(productParams);
 
   if (isLoading || !products) return <div>...loading</div>;
 

@@ -7,6 +7,7 @@ import { dummyReducer } from "../pages/dummy/dummyReducer";
 import { dummyApi } from "../pages/dummy/dummyApi";
 import { errorApi } from "../api/errorApi";
 import { cartApi } from "../pages/cart/cartApi";
+import { catalogSlice } from "../pages/catalog/catalogSlice";
 
 export function configureTheStore() {
   return legacy_createStore(couterReducer);
@@ -21,6 +22,7 @@ export const store = configureStore({
     Counter: counterSlice.reducer,
     Dummy_Slice: dummyReducer.reducer,
     uiSlice: uiSlice.reducer,
+    catalog: catalogSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

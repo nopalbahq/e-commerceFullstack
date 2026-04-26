@@ -57,11 +57,11 @@ namespace API.Controllers
         public async Task<IActionResult> GetFilters()
         {
             // Filter select Brand
-            var brand = await context.Product.Select(x => x.Brand).Distinct().ToListAsync();
+            var brands = await context.Product.Select(x => x.Brand).Distinct().ToListAsync();
             // Filter select Type
-            var type = await context.Product.Select(x => x.Type).Distinct().ToListAsync();
+            var types = await context.Product.Select(x => x.Type).Distinct().ToListAsync();
 
-            return Ok(new { brand, type });
+            return Ok(new { brands, types });
         }
     }
 }
