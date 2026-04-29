@@ -24,6 +24,6 @@ public static class HttpExtensions
 
     // Izinkan Frontend untuk membaca Header "Pagination" dari browser (CORS)
     // Tanpa ini, browser akan blokir akses ke header tersebut
-    response.Headers.Append(HeaderNames.AccessControlAllowHeaders, "Pagination");
+    response.Headers.Append(HeaderNames.AccessControlExposeHeaders, "Pagination");
   }
 }

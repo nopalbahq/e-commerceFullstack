@@ -3,6 +3,7 @@ import type { IProduct } from "../../model/product";
 import { baseQuerySystem } from "../../api/baseApi";
 import type { ProductParams } from "../../model/productParams";
 import { filterEmptyValues } from "../../lib/util";
+import type { Pagination } from "../../model/pagination";
 
 // catalogApi.ts
 // Konfigurasi RTK Query untuk semua request yang berhubungan dengan Product
@@ -14,7 +15,7 @@ export const catalogApi = createApi({
   endpoints: (builder) => ({
     // Ambil semua product dengan filter, search, sort, dan pagination
     // Contoh penggunaan: useGetFetchProductsQuery({ orderBy: "price", searchTerm: "boot", pageNumber: 1 })
-    getFetchProducts: builder.query<IProduct[], ProductParams>({
+    getFetchProducts: builder.query<{ items: IProduct[]; pagination: Pagination }, ProductParams>({
       query: (productParams) => {
         return {
           url: "products",
@@ -22,6 +23,12 @@ export const catalogApi = createApi({
           // Contoh: { searchTerm: "", pageNumber: 1 } → { pageNumber: 1 }
           params: filterEmptyValues(productParams),
         };
+      },
+      transformResponse: (items: IProduct[], meta) => {
+        const paginationHeader = meta?.response?.headers.get("Pagination");
+        const pagination = paginationHeader ? JSON.parse(paginationHeader) : null;
+
+        return { items, pagination };
       },
     }),
 

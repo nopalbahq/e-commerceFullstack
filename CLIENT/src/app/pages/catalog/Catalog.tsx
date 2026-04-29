@@ -1,8 +1,10 @@
-import { Grid2 } from "@mui/material";
+import { Grid2, Typography } from "@mui/material";
 import { useGetFetchProductsQuery } from "./catalogApi";
 import ProductList from "../../features/ProductList";
 import Filters from "../../features/Filters";
-import { useAppSelector } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import AppPagination from "../../shared/components/AppPagination";
+import { setPageNumber } from "./catalogSlice";
 // import { useEffect, useState } from "react";
 // import type { IProduct } from "../../model/product";
 
@@ -20,6 +22,7 @@ export default function Catalog() {
   // RTK Redux
   const productParams = useAppSelector((state) => state.catalog);
   const { data: products, isLoading } = useGetFetchProductsQuery(productParams);
+  const dispatch = useAppDispatch();
 
   if (isLoading || !products) return <div>...loading</div>;
 
@@ -29,7 +32,17 @@ export default function Catalog() {
         <Filters />
       </Grid2>
       <Grid2 size={9}>
-        <ProductList products={products} />
+        {products.items && products.items.length > 0 ? (
+          <>
+            <ProductList products={products.items} />
+            <AppPagination
+              metadata={products.pagination}
+              onPageChange={(page: number) => dispatch(setPageNumber(page))}
+            />
+          </>
+        ) : (
+          <Typography variant="h4"> No Result Filter</Typography>
+        )}
       </Grid2>
     </Grid2>
   );
