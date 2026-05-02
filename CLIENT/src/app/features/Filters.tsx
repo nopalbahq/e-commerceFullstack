@@ -1,9 +1,9 @@
-import { Box, Paper, Typography } from "@mui/material";
-import { useGetFetchFiltersQuery } from "../pages/catalog/catalogApi";
+import { Box, Button, Paper } from "@mui/material";
+// import { useGetFetchFiltersQuery } from "../pages/catalog/catalogApi";
 import Search from "./Search";
 import RadioButtonGroup from "../shared/components/RadioButtonGroup";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { setBrands, setOrderBy, setTypes } from "../pages/catalog/catalogSlice";
+import { resetParams, setBrands, setOrderBy, setTypes } from "../pages/catalog/catalogSlice";
 import CheckboxButtons from "../shared/components/CheckboxButtons";
 
 const sortOptions = [
@@ -12,12 +12,16 @@ const sortOptions = [
   { value: "price", label: "Price Low to High" },
 ];
 
-export default function Filters() {
-  const { data } = useGetFetchFiltersQuery();
+type Props = {
+  filtersData: { brands: string[]; types: string[] };
+};
+
+export default function Filters({ filtersData: data }: Props) {
+  // const { data } = useGetFetchFiltersQuery();
   const { orderBy, brands, types } = useAppSelector((state) => state.catalog);
   const dispatch = useAppDispatch();
 
-  if (!data?.brands || !data.types) return <Typography>Loading..</Typography>;
+  // if (!data?.brands || !data.types) return <Typography>Loading..</Typography>;
 
   return (
     <Box display={"flex"} flexDirection={"column"} gap={3}>
@@ -42,6 +46,14 @@ export default function Filters() {
       <Paper sx={{ p: 3 }}>
         <CheckboxButtons items={data.types} checked={types} onChange={(items: string[]) => dispatch(setTypes(items))} />
       </Paper>
+      <Button
+        onClick={() => {
+          dispatch(resetParams());
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      >
+        Reset Button
+      </Button>
     </Box>
   );
 }

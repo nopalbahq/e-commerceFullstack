@@ -75,4 +75,5 @@ export const catalogSlice = createSlice({
 //   dispatch(setSearchTerm("boot"))
 //   dispatch(setBrands(["Nike", "Adidas"]))
 //   dispatch(resetParams())
-export const { setOrderBy, setSearchTerm, setBrands, setTypes, setPageNumber, setPageSize } = catalogSlice.actions;
+export const { setOrderBy, setSearchTerm, setBrands, setTypes, setPageNumber, setPageSize, resetParams } =
+  catalogSlice.actions;

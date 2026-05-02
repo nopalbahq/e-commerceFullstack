@@ -1,5 +1,5 @@
 import { Grid2, Typography } from "@mui/material";
-import { useGetFetchProductsQuery } from "./catalogApi";
+import { useGetFetchFiltersQuery, useGetFetchProductsQuery } from "./catalogApi";
 import ProductList from "../../features/ProductList";
 import Filters from "../../features/Filters";
 import { useAppDispatch, useAppSelector } from "../../store/store";
@@ -22,14 +22,15 @@ export default function Catalog() {
   // RTK Redux
   const productParams = useAppSelector((state) => state.catalog);
   const { data: products, isLoading } = useGetFetchProductsQuery(productParams);
+  const { data: filtersData, isLoading: filtersLoading } = useGetFetchFiltersQuery();
   const dispatch = useAppDispatch();
 
-  if (isLoading || !products) return <div>...loading</div>;
+  if (isLoading || !products || filtersLoading || !filtersData) return <div>Loading...</div>;
 
   return (
     <Grid2 container spacing={4}>
       <Grid2 size={3}>
-        <Filters />
+        <Filters filtersData={filtersData} />
       </Grid2>
       <Grid2 size={9}>
         {products.items && products.items.length > 0 ? (
@@ -37,7 +38,10 @@ export default function Catalog() {
             <ProductList products={products.items} />
             <AppPagination
               metadata={products.pagination}
-              onPageChange={(page: number) => dispatch(setPageNumber(page))}
+              onPageChange={(page: number) => {
+                dispatch(setPageNumber(page));
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
             />
           </>
         ) : (
