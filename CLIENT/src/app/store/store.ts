@@ -8,6 +8,7 @@ import { dummyApi } from "../pages/dummy/dummyApi";
 import { errorApi } from "../api/errorApi";
 import { cartApi } from "../pages/cart/cartApi";
 import { catalogSlice } from "../pages/catalog/catalogSlice";
+import { accountApi } from "../pages/account/accountApi";
 
 export function configureTheStore() {
   return legacy_createStore(couterReducer);
@@ -19,6 +20,7 @@ export const store = configureStore({
     [dummyApi.reducerPath]: dummyApi.reducer,
     [errorApi.reducerPath]: errorApi.reducer,
     [cartApi.reducerPath]: cartApi.reducer,
+    [accountApi.reducerPath]: accountApi.reducer,
     Counter: counterSlice.reducer,
     Dummy_Slice: dummyReducer.reducer,
     uiSlice: uiSlice.reducer,
@@ -29,6 +31,7 @@ export const store = configureStore({
       .concat(catalogApi.middleware)
       .concat(dummyApi.middleware)
       .concat(errorApi.middleware)
+      .concat(accountApi.middleware)
       .concat(cartApi.middleware),
 });
 
