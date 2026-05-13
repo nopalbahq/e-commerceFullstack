@@ -1,18 +1,10 @@
 import { DarkMode, LightMode, ShoppingCart } from "@mui/icons-material";
-import {
-  AppBar,
-  Badge,
-  Box,
-  IconButton,
-  LinearProgress,
-  List,
-  ListItem,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Badge, Box, IconButton, LinearProgress, List, ListItem, Toolbar, Typography } from "@mui/material";
 import { Link, NavLink } from "react-router-dom";
 import { useAppSelector } from "../store/store";
 import { useGetFetchCartQuery } from "../pages/cart/cartApi";
+import UserMenu from "./UserMenu";
+import { useUseInfoQuery } from "../pages/account/accountApi";
 
 const middleLink = [
   {
@@ -62,14 +54,14 @@ type DarkModeProps = {
 };
 
 export default function Navbar({ darkUI, darkMode }: DarkModeProps) {
-  // const darkMode = true;
+  // const darkMode = true;`
+  const { data: user } = useUseInfoQuery();
   const { isLoading } = useAppSelector((state) => state.uiSlice);
 
   // const CartFetch
   const { data: carts } = useGetFetchCartQuery();
   // const ItemCount => item + item.qunatity
-  const itemCount =
-    carts?.items.reduce((sum, item) => sum + item.quantity, 0) || 0;
+  const itemCount = carts?.items.reduce((sum, item) => sum + item.quantity, 0) || 0;
 
   return (
     <AppBar position="fixed">
@@ -82,16 +74,14 @@ export default function Navbar({ darkUI, darkMode }: DarkModeProps) {
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="h6" component={NavLink} to="/" sx={navStyles}>
-            Welcome to our shop
+            e-Store
           </Typography>
-          <IconButton onClick={darkUI}>
-            {darkMode ? <DarkMode /> : <LightMode />}
-          </IconButton>
+          <IconButton onClick={darkUI}>{darkMode ? <DarkMode /> : <LightMode />}</IconButton>
         </Box>
 
         <List sx={{ display: "flex" }}>
-          {middleLink.map(({ title, path }, index) => (
-            <ListItem key={index} component={NavLink} to={path} sx={navStyles}>
+          {middleLink.map(({ title, path }) => (
+            <ListItem key={path} component={NavLink} to={path} sx={navStyles}>
               {title.toUpperCase()}
             </ListItem>
           ))}
@@ -100,33 +90,34 @@ export default function Navbar({ darkUI, darkMode }: DarkModeProps) {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          <IconButton
-            component={Link}
-            to="/cart"
-            size="large"
-            sx={{ color: "inherit" }}
-          >
+          <IconButton component={Link} to="/cart" size="large" sx={{ color: "inherit" }}>
             <Badge badgeContent={itemCount} color="secondary">
               <ShoppingCart />
             </Badge>
           </IconButton>
 
-          <List sx={{ display: "flex" }}>
-            {rightLink.map(({ title, path }, index) => (
-              <ListItem
-                key={index}
-                component={NavLink}
-                to={path}
-                sx={navStyles}
-              >
+          {user ? (
+            <UserMenu user={user} />
+          ) : (
+            <List sx={{ display: "flex" }}>
+              {rightLink.map(({ title, path }) => (
+                <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
+                  {title.toUpperCase()}
+                </ListItem>
+              ))}
+            </List>
+          )}
+
+          {/* <List sx={{ display: "flex" }}>
+            {rightLink.map(({ title, path }) => (
+              <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
                 {title.toUpperCase()}
               </ListItem>
             ))}
-          </List>
+          </List> */}
         </Box>
       </Toolbar>
       {isLoading && (
