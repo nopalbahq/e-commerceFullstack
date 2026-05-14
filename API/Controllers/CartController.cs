@@ -78,7 +78,11 @@ namespace API.Controllers
         private async Task<Cart?> RetreiveGetCart()
         {
             // Get Cart and Get Items (Cart) Include Product (CartItem) and get CartId in CartItem
-            return await context.Cart.Include(c => c.Items).ThenInclude(c => c.Product).FirstOrDefaultAsync(c => c.CartId == Request.Cookies["cartId"]);
+            // return await context.Cart.GetCartWithItems(Request.Cookies["cartId"]);
+            var cartId = Request.Cookies["cartId"];
+            if (string.IsNullOrEmpty(cartId)) return null;
+
+            return await context.Cart.GetCartWithItems(cartId);
         }
 
         private Cart CreateCart()
