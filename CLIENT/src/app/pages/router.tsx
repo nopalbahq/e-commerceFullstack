@@ -13,13 +13,20 @@ import CheckOutPage from "./checkout/CheckOutPage";
 import LoginForm from "./account/LoginForm";
 import RegisterForm from "./account/RegisterForm";
 import RequireAuth from "./RequireAuth";
+import CheckOutSuccess from "./checkout/CheckOutSuccess";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { element: <RequireAuth />, children: [{ path: "/checkout", element: <CheckOutPage /> }] },
+      {
+        element: <RequireAuth />,
+        children: [
+          { path: "/checkout", element: <CheckOutPage /> },
+          { path: "/checkout/success", element: <CheckOutSuccess /> },
+        ],
+      },
       { path: "", element: <HomePage /> },
       { path: "/catalog", element: <Catalog /> },
       { path: "/catalog/:id", element: <ProductDetails /> },

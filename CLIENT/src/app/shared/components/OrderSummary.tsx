@@ -1,13 +1,10 @@
 import { Box, Typography, Divider, Button, TextField, Paper } from "@mui/material";
 import { currencyFormat } from "../../lib/util";
-import { IItem } from "../../model/cart";
-import { useGetFetchCartQuery } from "../../pages/cart/cartApi";
 import { Link, useLocation } from "react-router-dom";
+import { useCart } from "../../lib/hooks/useCart";
 
 export default function OrderSummary() {
-  const { data: cart } = useGetFetchCartQuery();
-  const subtotal = cart?.items.reduce((sum: number, items: IItem) => sum + items.quantity * items.price, 0) ?? 0;
-  const deliveryFee = subtotal > 10000 ? 0 : 5000;
+  const { subtotal, deliveryFee } = useCart();
   const location = useLocation();
 
   return (

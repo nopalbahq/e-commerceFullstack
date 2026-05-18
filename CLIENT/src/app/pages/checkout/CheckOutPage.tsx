@@ -11,6 +11,7 @@ import { useCreatePayementIntentMutation } from "./checkoutApi";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
 export default function CheckOutPage() {
+  // => Semua Page ini check claude
   const { data: cart } = useGetFetchCartQuery();
   const [createPaymentIntent, { isLoading }] = useCreatePayementIntentMutation();
   const create = useRef(false); // => check claude
