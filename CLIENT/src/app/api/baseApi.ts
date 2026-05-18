@@ -1,15 +1,11 @@
-import {
-  fetchBaseQuery,
-  type BaseQueryApi,
-  type FetchArgs,
-} from "@reduxjs/toolkit/query";
+import { fetchBaseQuery, type BaseQueryApi, type FetchArgs } from "@reduxjs/toolkit/query";
 import { startLoading, stopLoading } from "../layout/uiSlice";
 import { toast } from "react-toastify";
 import { router } from "../pages/router";
 
 // Base URL
 const baseUrlStandar = fetchBaseQuery({
-  baseUrl: "https://localhost:5001/api",
+  baseUrl: import.meta.env.VITE_API_URL,
   credentials: "include",
 });
 
@@ -21,11 +17,7 @@ const sleep = () => {
 // TypeScript
 type ErrorResponse = string | { title: string } | { errors: string[] };
 
-export const baseQuerySystem = async (
-  args: string | FetchArgs,
-  api: BaseQueryApi,
-  extraOptions: object,
-) => {
+export const baseQuerySystem = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
   // Start Loading
   // MXMB500 coupon macbook
   api.dispatch(startLoading());
@@ -51,16 +43,13 @@ export const baseQuerySystem = async (
         }
         break;
       case 401:
-        if (typeof responseData === "object" && "title" in responseData)
-          toast.error(responseData.title);
+        if (typeof responseData === "object" && "title" in responseData) toast.error(responseData.title);
         break;
       case 404:
-        if (typeof responseData === "object" && "title" in responseData)
-          router.navigate("/not-found");
+        if (typeof responseData === "object" && "title" in responseData) router.navigate("/not-found");
         break;
       case 500:
-        if (typeof responseData === "object")
-          router.navigate("/server-error", { state: { error: responseData } });
+        if (typeof responseData === "object") router.navigate("/server-error", { state: { error: responseData } });
         break;
       default:
         break;

@@ -24,9 +24,13 @@ namespace API.Controllers
             cart.PaymentIntentId ??= intent.Id;
             cart.ClientSecret ??= intent.ClientSecret;
 
-            var result = await context.SaveChangesAsync() > 0;
+            // if there is 0 
+            if (context.ChangeTracker.HasChanges())
+            {
+                var result = await context.SaveChangesAsync() > 0;
 
-            if (!result) return BadRequest("Problem updating Cart with Intent");
+                if (!result) return BadRequest("Problem updating Cart with Intent");
+            }
 
             return cart.ToDto();
         }

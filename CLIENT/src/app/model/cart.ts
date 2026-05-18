@@ -3,6 +3,8 @@ import type { IProduct } from "./product";
 export interface ICart {
   cartId: string;
   items: IItem[];
+  clientSecret?: string;
+  paymentIntentId?: string;
 }
 
 export class IItem {

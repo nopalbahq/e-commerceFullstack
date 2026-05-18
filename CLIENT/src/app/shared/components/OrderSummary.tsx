@@ -2,12 +2,13 @@ import { Box, Typography, Divider, Button, TextField, Paper } from "@mui/materia
 import { currencyFormat } from "../../lib/util";
 import { IItem } from "../../model/cart";
 import { useGetFetchCartQuery } from "../../pages/cart/cartApi";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function OrderSummary() {
   const { data: cart } = useGetFetchCartQuery();
   const subtotal = cart?.items.reduce((sum: number, items: IItem) => sum + items.quantity * items.price, 0) ?? 0;
   const deliveryFee = subtotal > 10000 ? 0 : 5000;
+  const location = useLocation();
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" maxWidth="lg" mx="auto">
@@ -42,9 +43,11 @@ export default function OrderSummary() {
         </Box>
 
         <Box mt={2}>
-          <Button component={Link} to="/checkout" variant="contained" color="primary" fullWidth sx={{ mb: 1 }}>
-            Checkout
-          </Button>
+          {!location.pathname.includes("checkout") && (
+            <Button component={Link} to="/checkout" variant="contained" color="primary" fullWidth sx={{ mb: 1 }}>
+              Checkout
+            </Button>
+          )}
           <Button component={Link} to="/catalog" fullWidth>
             Continue Shopping
           </Button>
