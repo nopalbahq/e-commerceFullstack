@@ -11,6 +11,7 @@
     <Folder Include="Data\" />
     <Folder Include="DTO\" />
     <Folder Include="Entities\" />
+    <Folder Include="Entities\OrderAggregate\" />
     <Folder Include="Extensions\" />
     <Folder Include="Middleware\" />
     <Folder Include="RequestHelper\" />
