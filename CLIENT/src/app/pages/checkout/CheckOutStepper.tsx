@@ -13,12 +13,15 @@ import { useCart } from "../../lib/hooks/useCart";
 import { currencyFormat } from "../../lib/util";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useCreateOrderMutation } from "../order/orderApi";
+import type { PaymentSummary } from "../../model/order";
 
 const steps = ["Address", "Payment", "Review"];
 
 export default function CheckOutStepper() {
   // => Semua Page ini check claude
   const [activeStep, setActiveStep] = useState(0);
+  const [createOrder] = useCreateOrderMutation();
   const { cart } = useCart();
   const { data: { name, ...restAddress } = {} as Address, isLoading } = useFetchAddressQuery(); //=> check claude
   const [updateAddress] = useUpdateUserAddressMutation();
@@ -57,6 +60,9 @@ export default function CheckOutStepper() {
     try {
       if (!confirmationToken || !cart?.clientSecret) throw new Error("Unable to process payment");
 
+      const orderModel = await createOrderModel();
+      const orderResult = await createOrder(orderModel);
+
       const paymentResult = await stripe?.confirmPayment({
         clientSecret: cart.clientSecret,
         redirect: "if_required",
@@ -66,7 +72,7 @@ export default function CheckOutStepper() {
       });
 
       if (paymentResult?.paymentIntent?.status === "succeeded") {
-        navigate("/checkout/success");
+        navigate("/checkout/success", { state: orderResult });
         clearCart();
       } else if (paymentResult?.error) {
         throw new Error(paymentResult.error.message);
@@ -81,6 +87,26 @@ export default function CheckOutStepper() {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const createOrderModel = async () => {
+    const shippingAddress = await getStripeAddress();
+    const paymentMethodPreview = confirmationToken?.payment_method_preview;
+
+    // Pastikan ada card detail di dalamnya
+    const card = paymentMethodPreview?.card;
+
+    if (!shippingAddress || !card) throw new Error("Problem creating order");
+
+    // Extract hanya field yang dibutuhkan PaymentSummary
+    const paymentSummary: PaymentSummary = {
+      last4: card.last4,
+      brand: card.brand,
+      exp_month: card.exp_month,
+      exp_year: card.exp_year,
+    };
+
+    return { shippingAddress, paymentSummary };
   };
 
   const getStripeAddress = async () => {

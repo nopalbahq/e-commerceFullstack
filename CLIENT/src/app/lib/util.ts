@@ -1,6 +1,8 @@
 // utils.ts
 // Kumpulan helper function yang digunakan di seluruh aplikasi
 
+import type { PaymentSummary, ShippingAddress } from "../model/order";
+
 // Format harga dari satuan sen ke format dollar
 // Contoh: currencyFormat(1000) → "$10.00"
 // Kenapa dibagi 100? Karena harga di DB disimpan dalam satuan sen (cents)
@@ -22,3 +24,11 @@ export function filterEmptyValues(values: object) {
     ),
   );
 }
+
+export const formatAddressString = (address: ShippingAddress) => {
+  return `${address?.name}, ${address?.line1}, ${address.city}, ${address.state}, ${address?.postal_code}, ${address.country}`;
+};
+
+export const formatPaymentString = (card: PaymentSummary) => {
+  return `${card?.brand?.toUpperCase()}, **** **** **** ${card?.last4}, Exp: ${card?.exp_month}/${card?.exp_year}`;
+};
