@@ -3,7 +3,6 @@ import { AddressElement, PaymentElement, useElements, useStripe } from "@stripe/
 import { useState } from "react";
 import Review from "./Review";
 import { useFetchAddressQuery, useUpdateUserAddressMutation } from "../account/accountApi";
-import type { Address } from "../../model/user";
 import type {
   ConfirmationToken,
   StripeAddressElementChangeEvent,
@@ -23,7 +22,7 @@ export default function CheckOutStepper() {
   const [activeStep, setActiveStep] = useState(0);
   const [createOrder] = useCreateOrderMutation();
   const { cart } = useCart();
-  const { data: { name, ...restAddress } = {} as Address, isLoading } = useFetchAddressQuery(); //=> check claude
+  const { data, isLoading } = useFetchAddressQuery(); //=> check claude
   const [updateAddress] = useUpdateUserAddressMutation();
   const [saveAddressChecked, setSaveAddressChecked] = useState(false);
   const stripe = useStripe();
@@ -34,6 +33,11 @@ export default function CheckOutStepper() {
   const { total, clearCart } = useCart();
   const navigate = useNavigate();
   const [confirmationToken, setConfirmationToken] = useState<ConfirmationToken | null>(null);
+
+  let name, restAddress;
+  if (data) {
+    ({ name, ...restAddress } = data);
+  }
 
   const HandleNext = async () => {
     if (activeStep === 0 && saveAddressChecked && elements) {

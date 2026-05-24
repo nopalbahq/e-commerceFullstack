@@ -8,7 +8,7 @@ namespace API.Data;
 public class DbInitializer
 {
     // Build Method Function
-    public static void InitDb(WebApplication app)
+    public static async Task InitDb(WebApplication app)
     {
         using var scope = app.Services.CreateScope();
 
@@ -21,10 +21,10 @@ public class DbInitializer
         ?? throw new InvalidOperationException("Failed to retreive user manager");
 
         // Dummy data Product
-        SeedData(context, userManager);
+        await SeedData(context, userManager);
     }
 
-    private static async void SeedData(StoreContext context, UserManager<User> userManager)
+    private static async Task SeedData(StoreContext context, UserManager<User> userManager)
     {
         // Migrasi data dari StoreContext ambil datanya
         context.Database.Migrate();

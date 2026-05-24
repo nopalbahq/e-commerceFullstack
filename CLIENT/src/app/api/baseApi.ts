@@ -21,7 +21,7 @@ export const baseQuerySystem = async (args: string | FetchArgs, api: BaseQueryAp
   // Start Loading
   // MXMB500 coupon macbook
   api.dispatch(startLoading());
-  await sleep();
+  if (import.meta.env.DEV) await sleep();
   const result = await baseUrlStandar(args, api, extraOptions);
   // Stop Loading
   api.dispatch(stopLoading());
