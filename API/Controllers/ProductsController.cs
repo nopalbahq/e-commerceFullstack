@@ -1,7 +1,10 @@
 using API.Data;
+using API.DTO;
 using API.Entities;
 using API.Extensions;
 using API.RequestHelper;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +13,7 @@ namespace API.Controllers
 
     // Controller untuk handle semua request yang berhubungan dengan Product
     // BaseApiController berisi route dan konfigurasi dasar API
-    public class ProductsController(StoreContext context) : BaseApiController
+    public class ProductsController(StoreContext context, IMapper mapper) : BaseApiController
     {
         // Ambil semua product dengan filter, search, sort, dan pagination
         // Contoh request: GET /api/products?orderBy=price&searchTerm=boot&pageNumber=1&pageSize=10
@@ -63,5 +66,53 @@ namespace API.Controllers
 
             return Ok(new { brands, types });
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult<Product>> CreateProduct(CreateProductDto productDTO)
+        {
+            var product = mapper.Map<Product>(productDTO);
+
+            context.Product.Add(product);
+
+            var result = await context.SaveChangesAsync() > 0;
+
+            if (result) return CreatedAtAction(nameof(GetProduct), new { Id = product.Id }, product);
+
+            return BadRequest("Problem creating new Product");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateProductDto(UpdateProductDto updateProductDto)
+        {
+            var product = await context.Product.FindAsync(updateProductDto.Id);
+            if (product == null) return NotFound();
+
+            mapper.Map(updateProductDto, product);
+
+            var result = await context.SaveChangesAsync() > 0;
+
+            if (result) return NoContent();
+
+            return BadRequest("Problem Updating Product");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteProductDto(int id)
+        {
+            var product = await context.Product.FindAsync(id);
+
+            if (product == null) return NoContent();
+
+            context.Product.Remove(product);
+
+            var result = await context.SaveChangesAsync() > 0;
+            if (result) return Ok();
+
+            return BadRequest("Problem Deleteing the product");
+        }
+
     }
 }
