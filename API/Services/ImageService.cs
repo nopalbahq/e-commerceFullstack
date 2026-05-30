@@ -12,6 +12,7 @@ public class ImageService
   private readonly Cloudinary _cloudinary;
   public ImageService(IOptions<CloudinarySettings> config)
   {
+    //Accout Cloudinary
     var acc = new Account(
         config.Value.CloudName,
         config.Value.ApiKey,

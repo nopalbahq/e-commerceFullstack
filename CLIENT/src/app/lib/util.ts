@@ -1,6 +1,7 @@
 // utils.ts
 // Kumpulan helper function yang digunakan di seluruh aplikasi
 
+import type { FieldValues, Path, UseFormSetError } from "react-hook-form";
 import type { PaymentSummary, ShippingAddress } from "../model/order";
 
 // Format harga dari satuan sen ke format dollar
@@ -32,3 +33,20 @@ export const formatAddressString = (address: ShippingAddress) => {
 export const formatPaymentString = (card: PaymentSummary) => {
   return `${card?.brand?.toUpperCase()}, **** **** **** ${card?.last4}, Exp: ${card?.exp_month}/${card?.exp_year}`;
 };
+
+export function handleApiError<TFieldValues extends FieldValues>(
+  error: unknown,
+  setError: UseFormSetError<TFieldValues>,
+  fieldNames: Path<TFieldValues>[],
+) {
+  const apiError = (error as { message: string }) || {};
+
+  if (apiError.message && typeof apiError.message === "string") {
+    const errorArray = apiError.message.split(",");
+    errorArray.forEach((e) => {
+      const matchField = fieldNames.find((fieldName) => e.toLowerCase().includes(fieldName.toString().toLowerCase()));
+
+      if (matchField) setError(matchField, { message: e.trim() });
+    });
+  }
+}

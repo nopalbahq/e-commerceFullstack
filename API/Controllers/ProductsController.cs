@@ -3,6 +3,7 @@ using API.DTO;
 using API.Entities;
 using API.Extensions;
 using API.RequestHelper;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace API.Controllers
 
     // Controller untuk handle semua request yang berhubungan dengan Product
     // BaseApiController berisi route dan konfigurasi dasar API
-    public class ProductsController(StoreContext context, IMapper mapper) : BaseApiController
+    public class ProductsController(StoreContext context, IMapper mapper, ImageService imageService) : BaseApiController
     {
         // Ambil semua product dengan filter, search, sort, dan pagination
         // Contoh request: GET /api/products?orderBy=price&searchTerm=boot&pageNumber=1&pageSize=10
@@ -73,6 +74,19 @@ namespace API.Controllers
         {
             var product = mapper.Map<Product>(productDTO);
 
+            if (productDTO.File != null)
+            {
+                var imageResult = await imageService.AddImageAsync(productDTO.File);
+
+                if (imageResult.Error != null)
+                {
+                    return BadRequest(imageResult.Error.Message);
+                }
+
+                product.PictureUrl = imageResult.SecureUrl.AbsoluteUri;
+                product.PublicId = imageResult.PublicId;
+            }
+
             context.Product.Add(product);
 
             var result = await context.SaveChangesAsync() > 0;
@@ -91,6 +105,24 @@ namespace API.Controllers
 
             mapper.Map(updateProductDto, product);
 
+            if (updateProductDto.File != null)
+            {
+                var imageResult = await imageService.AddImageAsync(updateProductDto.File);
+
+                if (imageResult.Error != null)
+                {
+                    return BadRequest(imageResult.Error.Message);
+                }
+
+                if (!string.IsNullOrEmpty(product.PublicId))
+                {
+                    await imageService.DeleteImageAsync(product.PublicId);
+                }
+
+                product.PictureUrl = imageResult.SecureUrl.AbsoluteUri;
+                product.PublicId = imageResult.PublicId;
+            }
+
             var result = await context.SaveChangesAsync() > 0;
 
             if (result) return NoContent();
@@ -105,6 +137,11 @@ namespace API.Controllers
             var product = await context.Product.FindAsync(id);
 
             if (product == null) return NoContent();
+
+            if (!string.IsNullOrEmpty(product.PublicId))
+            {
+                await imageService.DeleteImageAsync(product.PublicId);
+            }
 
             context.Product.Remove(product);
 
