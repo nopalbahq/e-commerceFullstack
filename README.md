@@ -22,13 +22,15 @@ Project belajar Fullstack E-Commerce menggunakan **C# (.NET)** untuk Backend dan
 - C# / .NET
 - ASP.NET Core Web API
 - Entity Framework Core
-- SQL Server / PostgreSQL (sesuai konfigurasi)
+- SQL Server / Azure / Compose to Docker
 
 **Frontend (Client)**
 - React.js
 - TypeScript
-- Axios / Fetch
-- TailwindCSS atau CSS Framework lain (kalau pakai)
+- Redux
+- Material UI
+- React Form
+- Zod
 
 **Lainnya**
 - Docker & Docker Compose
@@ -89,11 +91,4 @@ npm run dev
 
 ---
 
-Mau saya **sesuaikan lagi**?  
-Misalnya:
-- Tambah lebih banyak detail fitur?
-- Versi yang lebih pendek?
-- Tambah badge (Docker, .NET, React)?
-- Atau mau pakai bahasa Inggris untuk portfolio?
-
-Kasih tahu saja apa yang ingin kamu ubah, saya revisi lagi. 😊
+Jika ada yang kurang mohon maaf atas kekurangannya. 😊
